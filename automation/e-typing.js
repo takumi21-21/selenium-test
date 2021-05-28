@@ -24,7 +24,6 @@ async function example() {
         try {
             const sentenceText = await await (await driver.findElement(By.id('sentenceText')).getText()).toLowerCase();
             for (i = 0; i < sentenceText.length; i++) {
-                console.log(sentenceText[i]);
                 word = sentenceText[i];
                 await driver.actions().keyDown(word).perform();
             }
