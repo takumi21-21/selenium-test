@@ -1,20 +1,39 @@
-const { Builder, By, Key, until } = require('selenium-webdriver');
+const {Builder, By, Key, until} = require('selenium-webdriver');
+const tesseract = require('tesseract.js');
+let fs = require('fs');
 
 async function example() {
     let driver = await new Builder().forBrowser('chrome').build();
-    try {
-        await driver.get('https://www.google.com/');
-        driver.sleep(3000);
-        await driver.findElement(By.name('q')).sendKeys('webdriver', Key.RETURN);
-        // let firstResult = await driver.(until.elementLocated(By.css('h3')), 10000);
-        // console.log(await firstResult.getAttribute('textContent'));
-        // firstResult.click();
+
+    await driver.get('https://www.e-typing.ne.jp/roma/check/');
+
+    await driver.findElement(By.id('level_check_btn')).sendKeys(Key.RETURN);
+    await driver.sleep(5000);
+
+    const iframe = await driver.findElement(By.id('typing_content'));
+    await driver.switchTo().frame(iframe);
+
+    await driver.findElement(By.css('#start_btn')).click();
+    await driver.sleep(3000);
+
+    await driver.actions().keyDown(Key.SPACE).perform();
+    await driver.sleep(3000);
+
+    const repeatFlg = true;
+    while (repeatFlg) {
+        try {
+            const sentenceText = await await (await driver.findElement(By.id('sentenceText')).getText()).toLowerCase();
+            for (i = 0; i < sentenceText.length; i++) {
+                console.log(sentenceText[i]);
+                word = sentenceText[i];
+                await driver.actions().keyDown(word).perform();
+            }
+            driver.sleep(1000);
+        } catch (error) {
+            repeatFlg = false;
+            console.log(error);
+        }
     }
-    catch {
-        console.log('error');
-    }
-    finally {
-    }
-}
+};
 
 example();
