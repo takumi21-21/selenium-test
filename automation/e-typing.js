@@ -26,6 +26,7 @@ async function example() {
             for (i = 0; i < sentenceText.length; i++) {
                 word = sentenceText[i];
                 await driver.actions().keyDown(word).perform();
+                await driver.sleep(50);
             }
             driver.sleep(1000);
         } catch (error) {
