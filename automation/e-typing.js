@@ -19,19 +19,17 @@ async function example() {
     await driver.actions().keyDown(Key.SPACE).perform();
     await driver.sleep(3000);
 
-    const repeatFlg = true;
-    while (repeatFlg) {
+    while (true) {
         try {
-            const sentenceText = await await (await driver.findElement(By.id('sentenceText')).getText()).toLowerCase();
+            const sentenceText = await driver.findElement(By.id('sentenceText')).getText();
             for (i = 0; i < sentenceText.length; i++) {
-                word = sentenceText[i];
+                word = sentenceText[i].toLowerCase();
                 await driver.actions().keyDown(word).perform();
                 await driver.sleep(50);
             }
-            driver.sleep(1000);
         } catch (error) {
-            repeatFlg = false;
             console.log(error);
+            return;
         }
     }
 };
